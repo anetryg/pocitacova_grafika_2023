@@ -1,4 +1,4 @@
-// 1) Napište funkci, která otočí pořadí prvků ve vrstupním poli. Nepoužívejte metodu reverse().
+// 1) Napište funkci, která otočí pořadí prvků ve vstupním poli. Nepoužívejte metodu reverse().
 
 
 // 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody mapy. Nakonec sečtěte kilometry v nové proměnné s názvem "totalDistanceInKilometers" a vraťte tuto proměnnou.
@@ -44,4 +44,4 @@ const orders = [
 // 8) Na max 1 řádek: Objednal si něco zákazník s id 123?
 
 
-// 9) Na max 1 řádek:: Byl objednaný produkt s id 123?
+// 9) Na max 1 řádek: Byl objednaný produkt s id 123?
