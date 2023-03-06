@@ -1,13 +1,13 @@
 // 1) Napište funkci, která otočí pořadí prvků ve vstupním poli. Nepoužívejte metodu reverse().
 
 
-// 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody map(). Nakonec sečtěte kilometry v nové proměnné s názvem "totalDistanceInKilometers" a vraťte tuto proměnnou.
+// 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody map(). Nakonec kilometry sečtěte.
 
 
 // 3) Napište funkci nazvanou "cleanNames", která přijímá pole řetězců obsahujících další mezery na začátku a konci. Funkce cleanNames() by měla použít metodu map() k vrácení nového pole s oříznutými názvy.
 
 
-// 4) Napište funkci, který vybere z pole pouze sudá čísla pomocí metody filer() a poté je umocněte
+// 4) Napište funkci, která vybere z pole pouze sudá čísla pomocí metody filer() a poté je umocněte.
 
 
 const orders = [
