@@ -1,29 +1,7 @@
 // 1) Napište funkci, která otočí pořadí prvků ve vrstupním poli. Nepoužívejte metodu reverse().
-function reverse_(array) {
-  const reversed = [];
-
-  for (let i = array.length - 1; i >= 0; i -= 1) {
-    reversed.push(array[i]);
-  }
-
-  return reversed;
-}
-
-console.log(reverse_([1, 2, 3]));
 
 
-
-// 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody map(). Nakonec kilometry sečtěte.
-function convertMilesToKilometers(arr) {
-  return arr
-    .map((mile) => mile * 1.609)
-    .reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    });
-}
-
-console.log(convertMilesToKilometers([155, 124, 5]));
-
+// 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody mapy. Nakonec sečtěte kilometry v nové proměnné s názvem "totalDistanceInKilometers" a vraťte tuto proměnnou.
 
 
 // 3) Napište funkci nazvanou "cleanNames", která přijímá pole řetězců obsahujících další mezery na začátku a konci. Funkce cleanNames() by měla použít metodu map() k vrácení nového pole s oříznutými názvy.
@@ -34,11 +12,6 @@ function cleanNames(arr) {
 console.log(cleanNames([" ahoj   ", "   cau"]));
 
 // 4) Napište funkci, který vybere z pole pouze sudá čísla pomocí metody filer() a poté je umocněte
-function isEven(numbers) {
-  return numbers
-    .filter((number) => number % 2 === 0)
-    .map((even) => even * even);
-}
 
 console.log(isEven([1, 2, 3, 4, 5]));
 
@@ -115,5 +88,5 @@ console.log(orders.every((order) => order.delivered));
 // 8) Na max 1 řádek: Objednal si něco zákazník s id 123?
 console.log(orders.find((order) => order.customerId == 123));
 
-// 9) Na max 1 řádek: Byl objednaný produkt s id 123?
-console.log(orders.some((order) => order.items.find((item) => item.id == 123)));
+
+// 9) Na max 1 řádek:: Byl objednaný produkt s id 123?
