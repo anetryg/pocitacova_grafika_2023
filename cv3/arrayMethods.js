@@ -1,4 +1,6 @@
-// 1) Napište funkci, která otočí pořadí prvků ve vrstupním poli. Nepoužívejte metodu reverse().
+// 1) Napište funkci, která otočí pořadí prvků ve vstupním poli. Nepoužívejte metodu reverse().
+
+
 function reverse_(array) {
   const reversed = [];
 
@@ -14,6 +16,8 @@ console.log(reverse_([1, 2, 3]));
 
 
 // 2) Napište funkci, která převede pole hodnot z mil na kilometry pomocí metody map(). Nakonec kilometry sečtěte.
+
+
 function convertMilesToKilometers(arr) {
   return arr
     .map((mile) => mile * 1.609)
@@ -27,6 +31,7 @@ console.log(convertMilesToKilometers([155, 124, 5]));
 
 
 // 3) Napište funkci nazvanou "cleanNames", která přijímá pole řetězců obsahujících další mezery na začátku a konci. Funkce cleanNames() by měla použít metodu map() k vrácení nového pole s oříznutými názvy.
+
 function cleanNames(arr) {
   return arr.map((name) => name.trim());
 }
@@ -36,7 +41,7 @@ console.log(cleanNames([" ahoj   ", "   cau"]));
 // 4) Napište funkci, který vybere z pole pouze sudá čísla pomocí metody filer() a poté je umocněte
 function isEven(numbers) {
   return numbers
-    .filter((number) => number % 2 === 0)
+    .filter((number) => {return number % 2 === 0})
     .map((even) => even * even);
 }
 
