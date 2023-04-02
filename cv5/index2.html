@@ -16,31 +16,32 @@
     const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
     const box = document.createElementNS(SVG_NAMESPACE, 'rect');
 
+    // pozice myši v rámci svg
     function getMousePosition(evt, svg) {
         var CTM = svg.getScreenCTM();
-        console.log({
-            x: (evt.clientX - CTM.e) / CTM.a,
-            y: (evt.clientY - CTM.f) / CTM.d,
-        })
         return {
             x: (evt.clientX - CTM.e) / CTM.a,
             y: (evt.clientY - CTM.f) / CTM.d,
         };
     }
 
+    // nastavení atributů svg
     box.setAttribute('x', 50);
     box.setAttribute('y', 50);
     box.setAttribute('width', 100);
     box.setAttribute('height', 100);
     box.setAttribute('fill', 'black');
 
+    // přidání do prvku box
     svg.appendChild(box);
 
     makeDragble(box);
 
     function makeDragble(element) {
-        //let selectedElement = undefined;
+        let selectedElement = undefined;
         let offset = undefined;
+
+        // vytvoření stolu
         const table = document.createElementNS(SVG_NAMESPACE, 'path');
         table.setAttribute('stroke-width', '5px');
         table.setAttribute('stroke', 'black');
@@ -49,35 +50,38 @@
         table.setAttribute('d', 'M 250 400 v -100 h 200 v 100');
         svg.appendChild(table);
 
+        // přidání událostí
         element.addEventListener("mousedown", startDrag);
         element.addEventListener("mousemove", drag);
         element.addEventListener("mouseup", endDrag);
         element.addEventListener("mouseleave", endDrag);
 
+        // při stisknutí myši
         function startDrag(e) {
             selectedElement = element;
             offset = getMousePosition(e, svg);
+            // do offsetu si ukládáme souřadnice boxu
             offset.x -= parseFloat(selectedElement.getAttribute("x"));
             offset.y -= parseFloat(selectedElement.getAttribute("y"));
         };
+
+        //při pohybu myši
         function drag(e) {
             if (selectedElement) {
                 const mouse = getMousePosition(e, svg);
                 element.setAttribute('x', mouse.x - offset.x);
                 element.setAttribute('y', mouse.y - offset.y);
-            }
-        }
+            };
+        };
+
+        // při dokončení přesunu
         function endDrag() {
             selectedElement = undefined;
             if (svg.checkIntersection(box, table.getBBox())) {
                 box.setAttribute('fill', 'green');
             }
-            else {
-                box.setAttribute('fill', 'unset');
-
-            }
-        }
-    }
+        };
+    };
 </script>
 
 </html>
