@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg id="svg" width="500" height="500"> </svg>
+</body>
+<script>
+    const svg = document.getElementById('svg');
+    const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+    const box = document.createElementNS(SVG_NAMESPACE, 'rect');
+
+    function getMousePosition(evt, svg) {
+        var CTM = svg.getScreenCTM();
+        console.log({
+            x: (evt.clientX - CTM.e) / CTM.a,
+            y: (evt.clientY - CTM.f) / CTM.d,
+        })
+        return {
+            x: (evt.clientX - CTM.e) / CTM.a,
+            y: (evt.clientY - CTM.f) / CTM.d,
+        };
+    }
+
+    box.setAttribute('x', 50);
+    box.setAttribute('y', 50);
+    box.setAttribute('width', 100);
+    box.setAttribute('height', 100);
+    box.setAttribute('fill', 'black');
+
+    svg.appendChild(box);
+
+    makeDragble(box);
+
+    function makeDragble(element) {
+        //let selectedElement = undefined;
+        let offset = undefined;
+        const table = document.createElementNS(SVG_NAMESPACE, 'path');
+        table.setAttribute('stroke-width', '5px');
+        table.setAttribute('stroke', 'black');
+        table.setAttribute('fill', 'transparent');
+
+        table.setAttribute('d', 'M 250 400 v -100 h 200 v 100');
+        svg.appendChild(table);
+
+        element.addEventListener("mousedown", startDrag);
+        element.addEventListener("mousemove", drag);
+        element.addEventListener("mouseup", endDrag);
+        element.addEventListener("mouseleave", endDrag);
+
+        function startDrag(e) {
+            selectedElement = element;
+            offset = getMousePosition(e, svg);
+            offset.x -= parseFloat(selectedElement.getAttribute("x"));
+            offset.y -= parseFloat(selectedElement.getAttribute("y"));
+        };
+        function drag(e) {
+            if (selectedElement) {
+                const mouse = getMousePosition(e, svg);
+                element.setAttribute('x', mouse.x - offset.x);
+                element.setAttribute('y', mouse.y - offset.y);
+            }
+        }
+        function endDrag() {
+            selectedElement = undefined;
+            if (svg.checkIntersection(box, table.getBBox())) {
+                box.setAttribute('fill', 'green');
+            }
+            else {
+                box.setAttribute('fill', 'unset');
+
+            }
+        }
+    }
+</script>
+
+</html>
