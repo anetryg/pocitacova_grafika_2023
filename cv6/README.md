@@ -1,3 +1,5 @@
+# Animace
+
 Animace je v zásadě sled statických obrázků / stavů grafiky měnící se v čase. Může se jednat o rastrovou grafiku (GIF) nebo o vektorovou. Animace mohou být interaktivní, SVG a HTML5 Canvas jsou pro tento účel ideální.
 
 Jako základ pro animaci můžeme využít např. funkci `animate`, kde pro vykreslování grafiky využíváme optimalizované API prohlížečů `requestAnimationFrame`. Při každém zavolání `animate` funkce _požádá_ o vykreslení dalšího snímku animace a jeden snímek animace vykreslí. Funkce `requestAnimationFrame` také funci `animate` předá jako parametr přesný aktuální čas, použijeme tedy ten místo např. `Date.now()`.
