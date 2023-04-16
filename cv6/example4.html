@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas animation example 4</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <canvas width="500" height="500" id="draw"></canvas>
+    <script>
+      "use strict";
+
+      let then = null;
+      let delta;
+
+      const CVS = document.getElementById("draw");
+      const CTX = CVS.getContext("2d");
+      const CW = CVS.width;
+      const CH = CVS.height;
+
+      const Y_KEYS = [38, 87, 40, 83],
+        X_KEYS = [37, 65, 39, 68],
+        Y_PRESSED = [],
+        X_PRESSED = [];
+
+      const A = 50;
+      const X_MIN = 0,
+        X_MAX = CW - A,
+        Y_MIN = 0,
+        Y_MAX = CH - A;
+
+      let x = (CW - A) / 2;
+      let y = (CH - A) / 2;
+
+      let speed = {
+        x: 0,
+        y: 0,
+      };
+
+      function animate(timestamp) {
+        if (then === null) then = timestamp;
+
+        requestAnimationFrame(animate);
+
+        delta = timestamp - then;
+        then = timestamp;
+
+        draw(delta);
+      }
+
+      function draw(dt) {
+        if (x <= X_MAX && x >= X_MIN) {
+          const DIST = x + (speed.x * dt) / 1000;
+          x = Math.max(X_MIN, Math.min(X_MAX, DIST));
+        }
+
+        if (y <= Y_MAX && y >= Y_MIN) {
+          const DIST = y + (speed.y * dt) / 1000;
+          y = Math.max(Y_MIN, Math.min(Y_MAX, DIST));
+        }
+
+        CTX.clearRect(0, 0, CW, CH);
+        CTX.fillStyle = "#ff0000";
+        CTX.fillRect(x, y, A, A);
+      }
+
+      function resolveSpeed(keys, pressed) {
+        if (keys.slice(0, 2).includes(pressed.slice(-1)[0])) return -300;
+        if (keys.slice(2, 4).includes(pressed.slice(-1)[0])) return 300;
+        return 0;
+      }
+
+      function keydown(e) {
+        if (Y_KEYS.includes(e.keyCode) && !Y_PRESSED.includes(e.keyCode)) {
+          Y_PRESSED.push(e.keyCode);
+          speed.y = resolveSpeed(Y_KEYS, Y_PRESSED);
+        }
+
+        if (X_KEYS.includes(e.keyCode) && !X_PRESSED.includes(e.keyCode)) {
+          X_PRESSED.push(e.keyCode);
+          speed.x = resolveSpeed(X_KEYS, X_PRESSED);
+        }
+      }
+
+      function keyup(e) {
+        if (Y_KEYS.includes(e.keyCode) && Y_PRESSED.includes(e.keyCode)) {
+          Y_PRESSED.splice(Y_PRESSED.indexOf(e.keyCode), 1);
+          speed.y = resolveSpeed(Y_KEYS, Y_PRESSED);
+        }
+
+        if (X_KEYS.includes(e.keyCode) && X_PRESSED.includes(e.keyCode)) {
+          X_PRESSED.splice(X_PRESSED.indexOf(e.keyCode), 1);
+          speed.x = resolveSpeed(X_KEYS, X_PRESSED);
+        }
+      }
+
+      document.addEventListener("keydown", keydown);
+      document.addEventListener("keyup", keyup);
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

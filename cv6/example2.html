@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas animation example 2</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <canvas width="500" height="500" id="draw"></canvas>
+    <script>
+      "use strict";
+
+      const FPS = 60;
+      const INTERVAL = 1000 / FPS;
+      let then = null;
+      let delta;
+
+      const CVS = document.getElementById("draw");
+      const CTX = CVS.getContext("2d");
+      const CW = CVS.width;
+      const CH = CVS.height;
+
+      const R = 50;
+      const X_MIN = R,
+        X_MAX = CW - R,
+        Y_MIN = R,
+        Y_MAX = CH - R;
+
+      let x = 250;
+      let y = 25;
+
+      const G = 2000;
+      const MIN_SPEED = G / 50;
+      const SHOVE_SPEED = G;
+      const BOUNCINESS = 0.7;
+
+      let speed = {
+        x: 0,
+        y: 0,
+      };
+
+      function animate(timestamp) {
+        if (then === null) then = timestamp;
+
+        requestAnimationFrame(animate);
+
+        delta = timestamp - then;
+        then = timestamp;
+
+        draw(delta);
+      }
+
+      function draw(dt) {
+        if (Y_MAX - y > 1) speed.y += (G * dt) / 1000;
+        if (Y_MAX - y < 1 && Math.abs(speed.y) < MIN_SPEED) {
+          speed.x *= 0.97;
+          speed.y = 0;
+          y = Y_MAX;
+        }
+
+        x += (speed.x * dt) / 1000;
+        y += (speed.y * dt) / 1000;
+
+        while (x < X_MIN || x > X_MAX) {
+          speed.x = BOUNCINESS * -speed.x;
+
+          if (x < X_MIN) {
+            x = 2 * X_MIN - x;
+          }
+
+          if (x > X_MAX) {
+            x = 2 * X_MAX - x;
+          }
+        }
+
+        while (y < Y_MIN || y > Y_MAX) {
+          speed.y = BOUNCINESS * -speed.y;
+
+          if (y < Y_MIN) {
+            y = 2 * Y_MIN - y;
+          }
+
+          if (y > Y_MAX) {
+            y = 2 * Y_MAX - y;
+          }
+        }
+
+        CTX.clearRect(0, 0, CW, CH);
+        CTX.beginPath();
+        CTX.fillStyle = "#ff0000";
+        CTX.arc(x, y, R, 0, 2 * Math.PI, false);
+        CTX.fill();
+      }
+
+      function click(e) {
+        const POS = getEvPos(e);
+
+        if (distance(POS, [x, y]) < R) {
+          const D = Math.abs(POS[0] - x) + Math.abs(POS[1] - y);
+          speed.x += ((SHOVE_SPEED / 2) * (x - POS[0])) / D;
+          speed.y += (SHOVE_SPEED * 2 * (y - POS[1])) / D;
+        }
+      }
+
+      function getEvPos(e) {
+        let posx = 0;
+        let posy = 0;
+        if (!e) {
+          let e = window.event;
+        }
+        if (e.pageX || e.pageY) {
+          posx = e.pageX;
+          posy = e.pageY;
+        } else if (e.clientX || e.clientY) {
+          posx =
+            e.clientX +
+            document.body.scrollLeft +
+            document.documentElement.scrollLeft;
+          posy =
+            e.clientY +
+            document.body.scrollTop +
+            document.documentElement.scrollTop;
+        }
+        // posx and posy contain the mouse position relative to the document
+
+        const CANVAS_BOX = CVS.getBoundingClientRect();
+
+        const C_POSX =
+          CANVAS_BOX.left +
+          document.body.scrollLeft +
+          document.documentElement.scrollLeft;
+        const C_POSY =
+          CANVAS_BOX.top +
+          document.body.scrollTop +
+          document.documentElement.scrollTop;
+
+        const RELATIVE_X = posx - C_POSX;
+        const RELATIVE_Y = posy - C_POSY;
+
+        return [RELATIVE_X, RELATIVE_Y];
+      }
+
+      function distance(a, b) {
+        return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5;
+      }
+
+      CVS.addEventListener("click", click);
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

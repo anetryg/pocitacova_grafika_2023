@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas animation example 1</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <canvas width="500" height="200" id="draw"></canvas>
+    <script>
+      "use strict";
+
+      const FPS = 60;
+      const INTERVAL = 1000 / FPS;
+      let then = null;
+      let delta;
+
+      let x = 25;
+      let y = 100;
+      let speed = 5;
+
+      function animate(timestamp) {
+        if (then === null) then = timestamp;
+
+        requestAnimationFrame(animate);
+
+        delta = timestamp - then;
+        if (delta > INTERVAL) {
+          then = timestamp - (delta % INTERVAL);
+
+          draw();
+        }
+      }
+
+      function draw() {
+        const CVS = document.getElementById("draw");
+        const CTX = CVS.getContext("2d");
+
+        x += speed;
+        if (x <= 25 || x >= 475) {
+          speed = -speed;
+        }
+
+        CTX.clearRect(0, 0, 500, 200);
+        CTX.beginPath();
+        CTX.fillStyle = "#ff0000";
+        CTX.arc(x, y, 25, 0, 2 * Math.PI, false);
+        CTX.fill();
+      }
+
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas animation example 3</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <canvas width="500" height="500" id="draw"></canvas>
+    <script>
+      "use strict";
+
+      let then = null;
+      let delta;
+
+      const CVS = document.getElementById("draw");
+      const CTX = CVS.getContext("2d");
+      const CW = CVS.width;
+      const CH = CVS.height;
+
+      const A = 50;
+      const X_MIN = 0,
+        X_MAX = CW - A,
+        Y_MIN = 0,
+        Y_MAX = CH - A;
+
+      let x = (CW - A) / 2;
+      let y = (CH - A) / 2;
+
+      let speed = {
+        x: 0,
+        y: 0,
+      };
+
+      function animate(timestamp) {
+        if (then === null) then = timestamp;
+
+        requestAnimationFrame(animate);
+
+        delta = timestamp - then;
+        then = timestamp;
+
+        draw(delta);
+      }
+
+      function draw(dt) {
+        if (x <= X_MAX && x >= X_MIN) {
+          const DIST = x + (speed.x * dt) / 1000;
+          x = Math.max(X_MIN, Math.min(X_MAX, DIST));
+        }
+
+        if (y <= Y_MAX && y >= Y_MIN) {
+          const DIST = y + (speed.y * dt) / 1000;
+          y = Math.max(Y_MIN, Math.min(Y_MAX, DIST));
+        }
+
+        CTX.clearRect(0, 0, CW, CH);
+        CTX.fillStyle = "#ff0000";
+        CTX.fillRect(x, y, A, A);
+      }
+
+      function keydown(e) {
+        switch (e.keyCode) {
+          case 38: // ↑
+          case 87: // W
+            speed.y = -300;
+            break;
+
+          case 40: // ↓
+          case 83: // S
+            speed.y = 300;
+            break;
+
+          case 37: // ←
+          case 65: // A
+            speed.x = -300;
+            break;
+
+          case 39: // →
+          case 68: // D
+            speed.x = 300;
+            break;
+        }
+      }
+
+      function keyup(e) {
+        // vertikální klávesy: ↑, ↓, W, S
+        if ([38, 40, 87, 83].includes(e.keyCode)) speed.y = 0;
+        // horizontální klávesy: ←, →, A, D
+        if ([37, 39, 65, 68].includes(e.keyCode)) speed.x = 0;
+      }
+
+      document.addEventListener("keydown", keydown);
+      document.addEventListener("keyup", keyup);
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>
